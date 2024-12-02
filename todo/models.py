@@ -11,6 +11,9 @@ class List(models.Model):
         User, on_delete=models.CASCADE, related_name="lists"
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Item(models.Model):
     name = models.CharField(max_length=500)
@@ -18,3 +21,6 @@ class Item(models.Model):
     parent_list = models.ForeignKey(
         List, on_delete=models.CASCADE, related_name="items"
     )
+
+    def __str__(self):
+        return self.name
