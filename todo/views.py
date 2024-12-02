@@ -1,12 +1,14 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from .models import List
 
 
 # Create your views here.
 
+def all_lists(request):
+    all_lists = List.objects.all()
 
-class HomePage(TemplateView):
-    """
-    Displays home page"
-    """
-    template_name = 'index.html'
+    context = {
+        'lists': all_lists,
+    }
+
+    return render(request, 'lists/home.html', context)
