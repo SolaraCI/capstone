@@ -23,7 +23,7 @@ class Item(models.Model):
     parent_list = models.ForeignKey(
         List, on_delete=models.CASCADE, related_name="items"
     )
-    super_item = models.BooleanField(default=False)
+    has_sub_items = models.BooleanField(default=False)
     
 
     def __str__(self):
