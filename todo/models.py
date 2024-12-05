@@ -19,10 +19,10 @@ class List(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=500)
-    complete = models.BooleanField(default=False)
     parent_list = models.ForeignKey(
         List, on_delete=models.CASCADE, related_name="items"
     )
+    complete = models.BooleanField(default=False)
     has_sub_items = models.BooleanField(default=False)
     
 
