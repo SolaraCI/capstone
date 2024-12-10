@@ -4,7 +4,7 @@
 {% block content %}
 <div class="row">
     <h1>This is the home.html block content</h1>
-    {% for list in lists %}
+    {% for list in object_list %}
     <div class="col-3">
         <div class="card">
             <a href="lists/{{ list.id }}">
