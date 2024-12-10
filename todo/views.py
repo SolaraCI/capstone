@@ -74,8 +74,22 @@ def register(request):
 
         new_user = User.objects.create_user(username=username, email=email, password=password)
         new_user.save()
+        messages.success(request, 'User created successfully. Please login now.')
+        return redirect('login')
     return render(request,'todo/register.html', {})
 
 
+def login_page(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
+        validate_user = authenticate(username=username, password=password)
+        if validate_user:
+            login(request, validate_user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid username or password.')
+
+    return render(request, 'todo/login.html', {})
 
