@@ -4,7 +4,7 @@ from .forms import ListForm, ItemForm
 from django.forms import modelform_factory
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout, models
+from django.contrib.auth import authenticate, login, logout
 
 
 # Create your views here.
@@ -12,31 +12,13 @@ from django.contrib.auth import authenticate, login, logout, models
 
 def all_lists(request):
     """Retrieves all existing lists to display on home page"""
-    all_lists = List.objects.all()
+    all_lists = List.objects.filter(creator=request.user)
 
     context = {
         'lists': all_lists,
     }
 
     return render(request, 'todo/home.html', context)
-
-
-def view_list(request, list_id):
-    """Retrieves selected list and returns it to render"""
-    todo_list = get_object_or_404(List, id=list_id)
-
-    if request.method == 'POST':
-        task = request.POST.get('task')
-        new_item = Item(name=task, parent_list=todo_list)
-        new_item.save()
-
-    context = {
-        'list': todo_list,
-        'items': todo_list.items,
-        'item_names': todo_list.items.values_list('name'),
-    }
-
-    return render(request, 'todo/view_list.html', context)
 
 
 def create_list(request):
@@ -55,7 +37,33 @@ def create_list(request):
             "form": form,
         }
         return render(request, 'todo/create_list.html', context)
-    
+
+
+def view_list(request, list_id):
+    """Retrieves selected list and returns it to render"""
+    todo_list = get_object_or_404(List, id=list_id)
+
+    if request.method == 'POST':
+        task = request.POST.get('task')
+        if task.strip():
+            new_item = Item(name=task, parent_list=todo_list)
+            new_item.save()
+
+    context = {
+        'list': todo_list,
+        'items': todo_list.items,
+        'item_names': todo_list.items.values_list('name'),
+    }
+
+    return render(request, 'todo/view_list.html', context)    
+
+
+def delete_item(request, name):
+    item_to_delete = Item.objects.get(name=name)
+    print(item_to_delete)
+    item_to_delete.delete()
+    return redirect()    
+
 
 def register(request):
     if request.method == 'POST':
