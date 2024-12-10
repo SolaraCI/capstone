@@ -2,10 +2,30 @@
 
 <!-- Displays selected list -->
 {% block content %}
-<div class="row">
+
+<form
+  method="POST"
+  class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2"
+>
+  {% csrf_token %}
+  <div class="col-12">
+    <div class="form-outline">
+      <input
+        type="text"
+        id="form1"
+        class="form-control"
+        name="task"
+        placeholder="Enter a task here"
+        parent_list={{list}}
+      />
+    </div>
+  </div>
+
+  <div class="row">
     <h1>{{ list.name }}</h1>
     {% for item in item_names %}
         <p>{{ item }}</p>
     {% endfor %}
-</div>
-{% endblock content %}
+  </div>
+  {% endblock content %}
+</form>
