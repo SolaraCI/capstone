@@ -7,5 +7,7 @@ urlpatterns = [
     path("lists/<list_id>", views.SingleListView.view_list, name="view_list"),
     path("register/", views.RegisterFormView.register, name="register"),
     path("login/", views.LoginFormView.login_page, name="login"),
-    path("lists/<str:current_list_id>/delete_item/<str:name>/", views.SingleListView.delete_item, name="delete_item"),
+    # path("lists/<str:current_list_id>/delete_item/<str:name>/", views.SingleListView.delete_item, name="delete_item"),
+    path("lists/<int:current_list_id>/delete_item/<str:name>/", views.delete_item, name="delete_item"),
+
 ]
