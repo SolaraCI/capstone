@@ -50,7 +50,7 @@
           {% endif %}
 
           <td>
-            <a href=""><button type="submit" class="btn btn-danger">Delete</button></a>
+            <a href="{% url 'delete_item' item %}"><button type="submit" class="btn btn-danger">Delete</button></a>
             <button type="submit" class="btn btn-success ms-1">Finished</button>
           </td>
         </tr>
