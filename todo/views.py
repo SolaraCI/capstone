@@ -57,7 +57,7 @@ class SingleListView(ListView):
         print(f"Delete item called with list_id: {current_list_id}, name: {name}")
         item_to_delete = get_object_or_404(Item, name=name, parent_list_id=current_list_id)
         print(f"item_to_delete.id: {item_to_delete.id}")
-        # item_to_delete.delete()
+        item_to_delete.delete()
         print(f"Deleted item: {name} from list {current_list_id}")
         return redirect('view_list', list_id=current_list_id)
 
