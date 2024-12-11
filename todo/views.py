@@ -52,19 +52,22 @@ class SingleListView(ListView):
         return render(request, 'todo/view_list.html', context)   
     
 
-    # def delete_item(name, current_list_id):
-    #     print("delete_item called")
-    #     item_to_delete = get_object_or_404(Item, name=name, parent_list=current_list_id, flat=True)
-    #     item_to_delete.delete()
-
-    #     return redirect()
     
-def delete_item(request, current_list_id, name):
-    print(f"Delete item called with list_id: {current_list_id}, name: {name}")
-    item_to_delete = get_object_or_404(Item, name=name, parent_list_id=current_list_id)
-    item_to_delete.delete()
-    print(f"Deleted item: {name} from list {current_list_id}")
-    return redirect('view_list', list_id=current_list_id)
+    def delete_item(request, current_list_id, name):
+        print(f"Delete item called with list_id: {current_list_id}, name: {name}")
+        item_to_delete = get_object_or_404(Item, name=name, parent_list_id=current_list_id)
+        print(f"item_to_delete.id: {item_to_delete.id}")
+        # item_to_delete.delete()
+        print(f"Deleted item: {name} from list {current_list_id}")
+        return redirect('view_list', list_id=current_list_id)
+
+
+# def edit_item(request, current_list_id, name):
+#     print(f"Edit item called with list_id: {current_list_id}, name: {name}")
+#     item_to_edit = get_object_or_404(Item, name=name, parent_list_id=current_list_id)
+#     item_to_edit.delete()
+#     print(f"Edit item: {name} from list {current_list_id}")
+#     return redirect('view_list', list_id=current_list_id)
 
     
 
