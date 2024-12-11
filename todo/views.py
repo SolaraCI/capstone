@@ -21,11 +21,20 @@ class OverView(ListView):
 class SingleListView(ListView):
     model = Item
     template_name = '/workspace/capstone/todo/templates/todo/view_list.html'
-    queryset = Item.objects.filter()
 
 
     def view_list(request, list_id):
-        todo_list = get_object_or_404(List, id=list_id)
+        global current_list_id
+        global todo_list
+        current_list_id = list_id
+        todo_list = get_object_or_404(List, id=current_list_id)
+        
+        print("-----------------------")
+        print(f"current_list_id: { current_list_id }")
+        print(f"todo_list: { todo_list }")
+        print(f"parent list: { todo_list.items.values_list('parent_list', flat=True) }")
+        print(f"request: {request}")
+        print("-----------------------")
 
         if request.method == 'POST':
             task = request.POST.get('task')
@@ -34,19 +43,21 @@ class SingleListView(ListView):
                 new_item.save()
 
         context = {
+            'list_id' : current_list_id,
             'list': todo_list,
             'items': todo_list.items,
-            'item_names': todo_list.items.values_list('name'),
+            'item_names': todo_list.items.values_list('name', flat=True),
         }
 
         return render(request, 'todo/view_list.html', context)   
     
 
-    def delete_item(request, name):
-        item_to_delete = Item.objects.get(name=name)
-        print(item_to_delete)
+    def delete_item(name, current_list_id):
+        print("delete_item called")
+        item_to_delete = get_object_or_404(Item, name=name, parent_list=current_list_id, flat=True)
         item_to_delete.delete()
-        return redirect()    
+
+        return redirect()
     
     
 
