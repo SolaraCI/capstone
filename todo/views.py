@@ -17,10 +17,12 @@ class OverView(ListView):
     template_name = '/workspace/capstone/todo/templates/todo/home.html'
 
 
+
 class SingleListView(ListView):
     model = Item
     template_name = '/workspace/capstone/todo/templates/todo/view_list.html'
     queryset = Item.objects.filter()
+
 
     def view_list(request, list_id):
         todo_list = get_object_or_404(List, id=list_id)
@@ -38,6 +40,14 @@ class SingleListView(ListView):
         }
 
         return render(request, 'todo/view_list.html', context)   
+    
+
+    def delete_item(request, name):
+        item_to_delete = Item.objects.get(name=name)
+        print(item_to_delete)
+        item_to_delete.delete()
+        return redirect()    
+    
     
 
 class CreateListFormView(FormView):
