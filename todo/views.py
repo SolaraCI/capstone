@@ -44,11 +44,11 @@ class SingleListView(ListView):
         print(f"request: {request}")
         print("-----------------------")
 
-        if request.method == 'POST':
-            task = request.POST.get('task')
-            if task.strip():
-                new_item = Item(name=task, parent_list=todo_list)
-                new_item.save()
+        # if request.method == 'POST':
+        #     task = request.POST.get('task')
+        #     if task.strip():
+        #         new_item = Item(name=task, parent_list=todo_list)
+        #         new_item.save()
 
         context = {
             'current_list_id' : current_list_id,
@@ -58,9 +58,15 @@ class SingleListView(ListView):
         }
 
         return render(request, 'todo/view_list.html', context)   
+
+
+    def add_item(request, current_list_id):
+        print("!!!add_item called!!!")
+        new_item = Item(name="new", parent_list=todo_list)
+        new_item.save()
+        return redirect('view_list', list_id=current_list_id)
     
 
-    
     def delete_item(request, current_list_id, name, id):
         print(f"Delete item called with list_id: {current_list_id}, name: {name}")
         item_to_delete = get_object_or_404(Item, name=name, parent_list_id=current_list_id, id=id)
@@ -70,12 +76,13 @@ class SingleListView(ListView):
         return redirect('view_list', list_id=current_list_id)
 
 
-# def edit_item(request, current_list_id, name):
-#     print(f"Edit item called with list_id: {current_list_id}, name: {name}")
-#     item_to_edit = get_object_or_404(Item, name=name, parent_list_id=current_list_id)
-#     item_to_edit.delete()
-#     print(f"Edit item: {name} from list {current_list_id}")
-#     return redirect('view_list', list_id=current_list_id)
+    def edit_item(request, current_list_id, name, id):
+        print(f"Edit item called with list_id: {current_list_id}, name: {name}")
+        item_to_edit = get_object_or_404(Item, name=name, parent_list_id=current_list_id, id=id)
+        print(f"item_to_edit.id: {item_to_edit.id}")
+        # item_to_edit.
+        print(f"Edited item: {name} from list {current_list_id}")
+        return redirect('view_list', list_id=current_list_id)
 
     
 
