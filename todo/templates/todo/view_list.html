@@ -35,14 +35,16 @@
     <thead>
       <tr>
         <th scope="col">Task</th>
+        <th scope="col">ID</th>
         <th scope="col">Status</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
-      {% for item in item_names %}
+      {% for item in item_sig_list %}
         <tr>
-          <td>{{ item }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.id }}</td>
           {% if item.complete %}
           <td>Complete</td>
           {% else %}
@@ -50,7 +52,7 @@
           {% endif %}
 
           <td>
-            <a href="{% url 'delete_item' current_list_id item %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'delete_item' current_list_id item.name item.id %}" class="btn btn-danger">Delete</a>
             <button type="submit" class="btn btn-success ms-1">Finished</button>
           </td>
         </tr>
