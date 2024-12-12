@@ -26,48 +26,63 @@ class SingleListView(ListView):
     def view_list(request, list_id):
         global current_list_id
         global todo_list
+        global item_sig_list
+        global item_names
+        global item_ids
         current_list_id = list_id
         todo_list = get_object_or_404(List, id=current_list_id)
+        item_sig_list = todo_list.items.values_list('name', 'id', named=True)
+        item_name_list = todo_list.items.values_list('name', flat=True)
+        item_id_list = todo_list.items.values_list('id', flat=True)
+
         
         print("-----------------------")
         print(f"current_list_id: { current_list_id }")
         print(f"todo_list: { todo_list }")
         print(f"parent list: { todo_list.items.values_list('parent_list', flat=True) }")
+        print(f"item_sig_list: { item_sig_list }")
         print(f"request: {request}")
         print("-----------------------")
 
-        if request.method == 'POST':
-            task = request.POST.get('task')
-            if task.strip():
-                new_item = Item(name=task, parent_list=todo_list)
-                new_item.save()
+        # if request.method == 'POST':
+        #     task = request.POST.get('task')
+        #     if task.strip():
+        #         new_item = Item(name=task, parent_list=todo_list)
+        #         new_item.save()
 
         context = {
             'current_list_id' : current_list_id,
             'list': todo_list,
-            'items': todo_list.items,
+            'item_sig_list': todo_list.items.values_list('name', 'id', named=True),
             'item_names': todo_list.items.values_list('name', flat=True),
         }
 
         return render(request, 'todo/view_list.html', context)   
+
+
+    def add_item(request, current_list_id):
+        print("!!!add_item called!!!")
+        new_item = Item(name="new", parent_list=todo_list)
+        new_item.save()
+        return redirect('view_list', list_id=current_list_id)
     
 
-    
-    def delete_item(request, current_list_id, name):
+    def delete_item(request, current_list_id, name, id):
         print(f"Delete item called with list_id: {current_list_id}, name: {name}")
-        item_to_delete = get_object_or_404(Item, name=name, parent_list_id=current_list_id)
+        item_to_delete = get_object_or_404(Item, name=name, parent_list_id=current_list_id, id=id)
         print(f"item_to_delete.id: {item_to_delete.id}")
         item_to_delete.delete()
         print(f"Deleted item: {name} from list {current_list_id}")
         return redirect('view_list', list_id=current_list_id)
 
 
-# def edit_item(request, current_list_id, name):
-#     print(f"Edit item called with list_id: {current_list_id}, name: {name}")
-#     item_to_edit = get_object_or_404(Item, name=name, parent_list_id=current_list_id)
-#     item_to_edit.delete()
-#     print(f"Edit item: {name} from list {current_list_id}")
-#     return redirect('view_list', list_id=current_list_id)
+    def edit_item(request, current_list_id, name, id):
+        print(f"Edit item called with list_id: {current_list_id}, name: {name}")
+        item_to_edit = get_object_or_404(Item, name=name, parent_list_id=current_list_id, id=id)
+        print(f"item_to_edit.id: {item_to_edit.id}")
+        # item_to_edit.
+        print(f"Edited item: {name} from list {current_list_id}")
+        return redirect('view_list', list_id=current_list_id)
 
     
 

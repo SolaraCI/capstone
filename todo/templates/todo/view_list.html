@@ -24,37 +24,47 @@
   </div>
 
   <div class="wrapper">
-    {% if messages %}
-        {% for message in messages %}
-          <h2 style="color: #b22222;">{{message}}</h2>
-        {% endfor %}
-      {% endif %}
+    {% if messages %} {% for message in messages %}
+    <h2 style="color: #b22222">{{message}}</h2>
+    {% endfor %} {% endif %}
   </div>
-  
+
   <table class="table mb-4">
     <thead>
       <tr>
         <th scope="col">Task</th>
+        <th scope="col"></th>
+        <th scope="col">ID</th>
         <th scope="col">Status</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
-      {% for item in item_names %}
-        <tr>
-          <td>{{ item }}</td>
-          {% if item.complete %}
-          <td>Complete</td>
-          {% else %}
-          <td>Incomplete</td>
-          {% endif %}
-
-          <td>
-            <a href="{% url 'delete_item' current_list_id item %}" class="btn btn-danger">Delete</a>
-            <button type="submit" class="btn btn-success ms-1">Finished</button>
-          </td>
-        </tr>
+      {% for item in item_sig_list %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td><button type="submit" class="btn ms-1">Edit</button></td>
+        <td>{{ item.id }}</td>
+        {% if item.complete %}
+        <td>Complete</td>
+        {% else %}
+        <td>Incomplete</td>
+        {% endif %}
+        <td>
+          <a
+            href="{% url 'delete_item' current_list_id item.name item.id %}"
+            class="btn btn-danger"
+            >Delete</a
+          >
+          <button type="submit" class="btn btn-success ms-1">Finished</button>
+        </td>
+      </tr>
       {% endfor %}
+      <tr>
+        <td>
+          <a href="{% url 'add_item' current_list_id %}"><button type="submit" class="btn btn-success ms-1">+</button></a>
+        </td>
+      </tr>
     </tbody>
   </table>
 
